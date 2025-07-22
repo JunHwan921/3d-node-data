@@ -24,11 +24,17 @@ jobs:
         pip install pyinstaller
     
     - name: Build EXE
+      shell: cmd
       run: |
+        echo Building EXE...
         pyinstaller --onefile --windowed --name="NodeEditor3D" main.py
+        echo.
+        echo Checking output files...
+        dir dist
     
     - name: Upload EXE
       uses: actions/upload-artifact@v3
       with:
         name: NodeEditor3D-Windows
-        path: dist/NodeEditor3D.exe
+        path: dist/*.exe
+        if-no-files-found: error
