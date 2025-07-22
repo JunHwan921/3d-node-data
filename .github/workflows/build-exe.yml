@@ -22,32 +22,33 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pyinstaller
+        echo "Installed packages:"
         pip list
     
-    - name: Build EXE
-      shell: cmd
+    - name: Test imports
       run: |
-        echo Building EXE...
-        pyinstaller --onefile --windowed ^
-          --name="NodeEditor3D" ^
-          --hidden-import="numpy" ^
-          --hidden-import="sklearn" ^
-          --hidden-import="scipy" ^
-          --hidden-import="PyQt5" ^
-          --hidden-import="pyqtgraph" ^
-          --hidden-import="OpenGL" ^
-          --collect-all="numpy" ^
-          --collect-all="sklearn" ^
-          --collect-all="scipy" ^
-          --collect-all="pyqtgraph" ^
-          main.py
-        echo.
-        echo Checking output files...
+        python -c "import numpy; print('NumPy version:', numpy.__version__)"
+        python -c "import sklearn; print('Scikit-learn version:', sklearn.__version__)"
+        python -c "import PyQt5; print('PyQt5 imported successfully')"
+    
+    - name: Build EXE with spec
+      run: |
+        pyinstaller --clean NodeEditor3D.spec
+        
+    - name: Check output
+      run: |
         dir dist
+        dir dist\NodeEditor3D
+    
+    - name: Create single EXE
+      run: |
+        pyinstaller --onefile --name="NodeEditor3D_single" --distpath=dist NodeEditor3D.spec
     
     - name: Upload EXE
       uses: actions/upload-artifact@v4
       with:
         name: NodeEditor3D-Windows
-        path: dist/*.exe
+        path: |
+          dist/NodeEditor3D/
+          dist/*.exe
         if-no-files-found: error
