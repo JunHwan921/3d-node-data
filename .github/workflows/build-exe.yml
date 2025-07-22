@@ -22,12 +22,25 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pyinstaller
+        pip list
     
     - name: Build EXE
       shell: cmd
       run: |
         echo Building EXE...
-        pyinstaller --onefile --windowed --name="NodeEditor3D" main.py
+        pyinstaller --onefile --windowed ^
+          --name="NodeEditor3D" ^
+          --hidden-import="numpy" ^
+          --hidden-import="sklearn" ^
+          --hidden-import="scipy" ^
+          --hidden-import="PyQt5" ^
+          --hidden-import="pyqtgraph" ^
+          --hidden-import="OpenGL" ^
+          --collect-all="numpy" ^
+          --collect-all="sklearn" ^
+          --collect-all="scipy" ^
+          --collect-all="pyqtgraph" ^
+          main.py
         echo.
         echo Checking output files...
         dir dist
