@@ -25,7 +25,7 @@ jobs:
     
     - name: Build EXE
       run: |
-        pyinstaller --onefile --windowed --name="NodeEditor3D" --add-data="src;src" --add-data="data;data" --add-data="gui;gui" main.py
+        pyinstaller --onefile --windowed --name="NodeEditor3D" main.py
     
     - name: Upload EXE
       uses: actions/upload-artifact@v3
