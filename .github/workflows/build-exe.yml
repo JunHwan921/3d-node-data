@@ -25,4 +25,10 @@ jobs:
     
     - name: Build EXE
       run: |
-        py
+        pyinstaller --onefile --windowed --name="NodeEditor3D" --add-data="src;src" --add-data="data;data" --add-data="gui;gui" main.py
+    
+    - name: Upload EXE
+      uses: actions/upload-artifact@v3
+      with:
+        name: NodeEditor3D-Windows
+        path: dist/NodeEditor3D.exe
